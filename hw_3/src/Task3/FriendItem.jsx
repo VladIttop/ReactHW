@@ -1,15 +1,17 @@
+import Friends from "./CSS/Friends.module.css";
+
 export default function FriendItem({ name, avatar, isOnline }) {
   let status;
   if (isOnline) {
-    status = "Online";
+    status = Friends.online; 
   } else {
-    status = "Offline";
+    status = Friends.offline; 
   }
   return (
-    <li class="item">
-      <span class="status">{status}</span>
-      <img class="avatar" src={avatar} alt="User avatar" width="48" />
-      <p class="name">{name}</p>
+    <li className={Friends.item}>
+      <span className={status}></span>
+      <img className={Friends.avatar} src={avatar} alt="User avatar" width="48" />
+      <p className={Friends.name}>{name}</p>
     </li>
   );
 }
