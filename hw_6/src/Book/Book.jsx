@@ -3,28 +3,36 @@ import { Component } from "react";
 class Book extends Component {
   state = {
     contacts: [
-        {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
-        {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
-        {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
-        {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
+      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
+      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
+      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
+      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
     ],
     name: "",
-    number:"",
-    filter:""
+    number: "",
+    filter: "",
   };
   addContact = (e) => {
     e.preventDefault();
     this.setState((prevState) => ({
-      contacts: [...prevState.contacts, { name: prevState.name, number: prevState.number } ],
+      contacts: [
+        ...prevState.contacts,
+        { name: prevState.name, number: prevState.number },
+      ],
     }));
   };
-  filterContacts = () => {
-    this.setState((prevState) => {
-        prevState.contacts.map((item) => {
-            filter: return <li key={item.name}>{item.name}: {item.number}</li>;
-        })
-    })
+  getFilteredContacts = () => {
+    const { contacts, filter } = this.state;
+    return contacts.filter((item) =>
+      item.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
+  deleteContact = (id) => () => {
+    this.setState((prevState) => ({
+      contacts: prevState.contacts.filter((item) => item.id !== id),
+    }));
   }
+
   render() {
     return (
       <div>
@@ -56,12 +64,17 @@ class Book extends Component {
           type="text"
           name="filter"
           placeholder="Search contacts"
-          onChange={(e) => this.setState({ filter: e.target.value }, this.filterContacts())}
+          onChange={(e) =>
+            this.setState({ filter: e.target.value }, this.getFilteredContacts)
+          }
         />
         <ul>
-          {this.state.contacts.map((item) => {
-            return <li key={item.name}>{item.name}: {item.number}</li>;
-          })}
+          {this.getFilteredContacts().map((item) => (
+            <li key={item.id}>
+              {item.name}: {item.number} 
+              <button onClick={this.deleteContact(item.id)}>Delete</button>
+            </li>
+          ))}
         </ul>
       </div>
     );
